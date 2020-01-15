@@ -9,25 +9,32 @@ namespace server
     {
         public override Task<CalculatorResponse> Calculator(CalculatorRequest request, ServerCallContext context)
         {
-            var result = 0;
-
-            switch (request.Operation)
+            try
             {
-                case "+":
-                    result = request.FirstValue + request.SecondValue;
-                    break;
-                case "-":
-                    result = request.FirstValue - request.SecondValue;
-                    break;
-                case "*":
-                    result = request.FirstValue * request.SecondValue;
-                    break;
-                case "/":
-                    result = request.FirstValue / request.SecondValue;
-                    break;
-            }
+                var result = 0;
 
-            return Task.FromResult(new CalculatorResponse() { Result = result, Request = request });
+                switch (request.Operation)
+                {
+                    case "+":
+                        result = request.FirstValue + request.SecondValue;
+                        break;
+                    case "-":
+                        result = request.FirstValue - request.SecondValue;
+                        break;
+                    case "*":
+                        result = request.FirstValue * request.SecondValue;
+                        break;
+                    case "/":
+                        result = request.FirstValue / request.SecondValue;
+                        break;
+                }
+
+                return Task.FromResult(new CalculatorResponse() { Result = result, Request = request });
+            }
+            catch (System.Exception e)
+            {
+                throw new RpcException(new Status(StatusCode.Internal, $"Something went wrong - Exception: {e}"));
+            }
         }
     }
 }

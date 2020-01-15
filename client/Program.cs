@@ -11,43 +11,54 @@ namespace client
 
         static void Main(string[] args)
         {
-            Channel channel = new Channel(target, ChannelCredentials.Insecure);
-
-            channel.ConnectAsync().ContinueWith((task) =>
+            try
             {
-                if (task.Status == TaskStatus.RanToCompletion)
-                    Console.WriteLine("The client connected successfully");
-            });
+                Channel channel = new Channel(target, ChannelCredentials.Insecure);
 
-            var client = new CalculatorService.CalculatorServiceClient(channel);
+                channel.ConnectAsync().ContinueWith((task) =>
+                {
+                    if (task.Status == TaskStatus.RanToCompletion)
+                        Console.WriteLine("The client connected successfully");
+                });
 
-            Console.WriteLine("Which is the FIRST value for your operation? ");
-            var firstValue = Console.ReadLine();
+                var client = new CalculatorService.CalculatorServiceClient(channel);
 
-            Console.WriteLine("Which is the SECOND value for your operation? ");
-            var secondValue = Console.ReadLine();
+                Console.WriteLine("Which is the FIRST value for your operation? ");
+                var firstValue = Console.ReadLine();
 
-            Console.WriteLine("Inform the operation:");
-            Console.WriteLine("  + = Addition ");
-            Console.WriteLine("  - = Subtraction ");
-            Console.WriteLine("  * = Multiplication ");
-            Console.WriteLine("  / = Division ");
+                Console.WriteLine("Which is the SECOND value for your operation? ");
+                var secondValue = Console.ReadLine();
 
-            var operation = Console.ReadLine();
+                Console.WriteLine("Inform the operation:");
+                Console.WriteLine("  + = Addition ");
+                Console.WriteLine("  - = Subtraction ");
+                Console.WriteLine("  * = Multiplication ");
+                Console.WriteLine("  / = Division ");
 
-            var request = new CalculatorRequest()
+                var operation = Console.ReadLine();
+
+                var request = new CalculatorRequest()
+                {
+                    FirstValue = Convert.ToInt32(firstValue),
+                    SecondValue = Convert.ToInt32(secondValue),
+                    Operation = operation
+                };
+
+                var response = client.Calculator(request);
+
+                Console.WriteLine(response.Result);
+
+                channel.ShutdownAsync().Wait();
+                Console.ReadLine();
+            }
+            catch (RpcException e)
             {
-                FirstValue = Convert.ToInt32(firstValue),
-                SecondValue = Convert.ToInt32(secondValue),
-                Operation = operation
-            };
-
-            var response = client.Calculator(request);
-
-            Console.WriteLine(response.Result);
-
-            channel.ShutdownAsync().Wait();
-            Console.ReadLine();
+                Console.WriteLine($"StatusCode: {e.Status.StatusCode} | Detail: {e.Status.Detail}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Something went wrong.");
+            }
         }
     }
 }
