@@ -1,6 +1,7 @@
 ﻿using Calculator;
 using Grpc.Core;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace server
@@ -15,6 +16,15 @@ namespace server
 
             try
             {
+                var serverCert = File.ReadAllText("ssl/server.crt");
+                var serverKey = File.ReadAllText("ssl/server.key");
+                var caCrt = File.ReadAllText("ssl/ca.crt");
+
+                var credentials = new SslServerCredentials(new List<KeyCertificatePair>()
+                {
+                    new KeyCertificatePair(serverCert, serverKey)
+                }, caCrt, true);
+
                 server = new Server()
                 {
                     Services = { CalculatorService.BindService(new CalculatorServiceImplementation()) },
