@@ -37,19 +37,21 @@ namespace client
 
                 var operation = Console.ReadLine();
 
-                var request = new CalculatorRequest()
+                var response = client.Calculator(new CalculatorRequest()
                 {
                     FirstValue = Convert.ToInt32(firstValue),
                     SecondValue = Convert.ToInt32(secondValue),
                     Operation = operation
-                };
-
-                var response = client.Calculator(request);
+                }, deadline: DateTime.UtcNow.AddMilliseconds(500));
 
                 Console.WriteLine(response.Result);
 
                 channel.ShutdownAsync().Wait();
                 Console.ReadLine();
+            }
+            catch (RpcException e) when (e.StatusCode == StatusCode.DeadlineExceeded)
+            {
+                Console.WriteLine($"The communication exceeded the deadline");
             }
             catch (RpcException e)
             {
