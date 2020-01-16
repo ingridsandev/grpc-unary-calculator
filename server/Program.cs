@@ -28,8 +28,6 @@ namespace server
                     new KeyCertificatePair(serverCert, serverKey)
                 }, caCrt, true);
 
-                IEnumerable<ServiceDescriptor> x = new List<ServiceDescriptor>() { CalculatorService.Descriptor };
-
                 server = new Server()
                 {
                     Services = 
