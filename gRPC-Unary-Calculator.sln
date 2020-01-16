@@ -7,14 +7,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "client", "client\client.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "server", "server\server.csproj", "{DA2E01C0-1B4F-4B03-9832-20D2E08C8EDC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ssl", "ssl", "{F80ADEFB-3E7D-4469-87B1-918EE760D874}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "proto", "proto", "{A6A32ADA-70FD-4FAB-A472-D0DA19652AE5}"
 	ProjectSection(SolutionItems) = preProject
 		calculator.proto = calculator.proto
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "proto", "proto", "{FD4F6C20-CDF6-4632-9818-4D6EFB603EAC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ssl", "ssl", "{A15FF514-C079-438C-A125-63BB81FEFA0C}"
 	ProjectSection(SolutionItems) = preProject
-		calculator.proto = calculator.proto
+		ssl\ca.crt = ssl\ca.crt
+		ssl\ca.key = ssl\ca.key
+		ssl\client.csr = ssl\client.csr
+		ssl\server.csr = ssl\server.csr
+		ssl\ssl.sh = ssl\ssl.sh
 	EndProjectSection
 EndProject
 Global
