@@ -1,5 +1,8 @@
 ﻿using Calculator;
+using Google.Protobuf.Reflection;
 using Grpc.Core;
+using Grpc.Reflection;
+using Grpc.Reflection.V1Alpha;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,10 +28,16 @@ namespace server
                     new KeyCertificatePair(serverCert, serverKey)
                 }, caCrt, true);
 
+                IEnumerable<ServiceDescriptor> x = new List<ServiceDescriptor>() { CalculatorService.Descriptor };
+
                 server = new Server()
                 {
-                    Services = { CalculatorService.BindService(new CalculatorServiceImplementation()) },
-                    Ports = { new ServerPort("localhost", Port, ServerCredentials.Insecure) }
+                    Services = 
+                    { 
+                        CalculatorService.BindService(new CalculatorServiceImplementation()),
+                        ServerReflection.BindService(new ReflectionServiceImpl(new List<ServiceDescriptor>() { CalculatorService.Descriptor }))
+                    },
+                    Ports = { new ServerPort("localhost", Port, ServerCredentials.Insecure) },
                 };
 
                 server.Start();
