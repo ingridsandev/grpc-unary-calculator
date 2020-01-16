@@ -35,7 +35,7 @@ namespace server
                         CalculatorService.BindService(new CalculatorServiceImplementation()),
                         ServerReflection.BindService(new ReflectionServiceImpl(new List<ServiceDescriptor>() { CalculatorService.Descriptor }))
                     },
-                    Ports = { new ServerPort("localhost", Port, credentials) },
+                    Ports = { new ServerPort("localhost", Port, ServerCredentials.Insecure) },
                 };
 
                 server.Start();
